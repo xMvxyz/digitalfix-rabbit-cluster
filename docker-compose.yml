@@ -1,0 +1,42 @@
+services:
+  rabbitmq-1:
+    image: rabbitmq:4.2.9-management
+    container_name: rabbitmq-1
+    hostname: rabbitmq-1
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: rabbitmq-cluster-cookie
+    volumes:
+      - rabbitmq1_data:/var/lib/rabbitmq
+      - ./rabbitmq-1/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    networks:
+      - digitalfix-network
+
+  rabbitmq-2:
+    image: rabbitmq:4.2.9-management
+    container_name: rabbitmq-2
+    hostname: rabbitmq-2
+    restart: unless-stopped
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: rabbitmq-cluster-cookie
+    volumes:
+      - rabbitmq2_data:/var/lib/rabbitmq
+      - ./rabbitmq-2/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    networks:
+      - digitalfix-network
+    depends_on:
+      - rabbitmq-1
+      
+volumes:
+  rabbitmq1_data:
+  rabbitmq2_data:
+
+networks:
+  digitalfix-network:
+    external: true
