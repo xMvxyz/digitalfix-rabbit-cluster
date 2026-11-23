@@ -5,7 +5,8 @@ services:
     hostname: rabbitmq-1
     restart: unless-stopped
     ports:
-      - "127.0.0.1:15672:15672"
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_ERLANG_COOKIE: rabbitmq-cluster-cookie
     volumes:
